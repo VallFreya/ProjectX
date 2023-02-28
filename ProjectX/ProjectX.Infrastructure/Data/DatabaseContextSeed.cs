@@ -45,7 +45,9 @@ namespace ProjectX.Infrastructure.Data
         {
             return new List<Master>()
             {
-                new Master() { Name = "Валентина", Surname = "Щербакова", MiddleName = "Юрьевна"}
+                new Master() { Name = "Валентина", Surname = "Щербакова", MiddleName = "Юрьевна"},
+                new Master() { Name = "Анастасия", Surname = "Экснер", MiddleName = "Юрьевна"}
+
             };
         }
     }
