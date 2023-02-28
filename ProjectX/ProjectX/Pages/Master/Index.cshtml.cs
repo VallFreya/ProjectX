@@ -16,9 +16,13 @@ namespace ProjectX.Web.Pages.Master
 
         public IEnumerable<MasterViewModel> Masters { get; set; } = new List<MasterViewModel>();
 
+        public MasterViewModel Master { get; set; }
+
+
         public async Task<IActionResult> OnGetAsync()
         {
             Masters = await masterPageService.GetAllAsync();
+            Master = await masterPageService.GetByIdAsync(2);
             return Page();
         }
     }

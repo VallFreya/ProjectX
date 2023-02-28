@@ -16,5 +16,10 @@ namespace ProjectX.Application.Services
         {
             return await masterRepository.GetAllAsync();
         }
+
+        public async Task<Master> GetByIdAsync(int id)
+        {
+            return await masterRepository.GetByIdAsync(id);
+        }
     }
 }

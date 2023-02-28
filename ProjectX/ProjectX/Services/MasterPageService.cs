@@ -21,5 +21,12 @@ namespace ProjectX.Web.Services
             var mapped = mapper.Map<IEnumerable<MasterViewModel>>(masters);
             return mapped;
         }
+
+        public async Task<MasterViewModel> GetByIdAsync(int id)
+        {
+            var master = await masterService.GetByIdAsync(id);
+            var mapped = mapper.Map<MasterViewModel>(master);
+            return mapped;
+        }
     }
 }

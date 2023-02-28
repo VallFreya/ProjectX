@@ -16,5 +16,6 @@ namespace ProjectX.Infrastructure.Repositories
         {
             return await _dbContext.Masters.ToListAsync();
         }
+
     }
 }
