@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProjectX.Web.Interfaces;
 using ProjectX.Web.ViewModels;
@@ -23,6 +23,7 @@ namespace ProjectX.Web.Pages.Master
         {
             Masters = await masterPageService.GetAllAsync();
             Master = await masterPageService.GetByIdAsync(2);
+            Master = await masterPageService.GetByNameAsync("Валентина");
             return Page();
         }
     }

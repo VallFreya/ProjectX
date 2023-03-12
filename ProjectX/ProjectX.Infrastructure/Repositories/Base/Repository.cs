@@ -92,5 +92,7 @@ namespace ProjectX.Infrastructure.Repositories.Base
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
+
+        
     }
 }

@@ -28,5 +28,12 @@ namespace ProjectX.Web.Services
             var mapped = mapper.Map<MasterViewModel>(master);
             return mapped;
         }
+
+        public async Task<MasterViewModel> GetByNameAsync(string name)
+        {
+            var master = await masterService.GetByNameAsync(name);
+            var mapped = mapper.Map<MasterViewModel>(master);
+            return mapped;
+        }
     }
 }

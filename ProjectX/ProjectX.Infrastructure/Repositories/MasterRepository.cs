@@ -17,5 +17,11 @@ namespace ProjectX.Infrastructure.Repositories
             return await _dbContext.Masters.ToListAsync();
         }
 
+        public async Task<IReadOnlyList<Master>> GetByNameAsync(string name)
+        {
+            var masters = await _dbContext.Masters.ToListAsync();
+            return  masters.Where(master => master.Name == name).ToList();
+        }
+
     }
 }

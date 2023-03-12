@@ -6,5 +6,6 @@ namespace ProjectX.Core.Repositories
     public interface IMasterRepository : IRepository<Master>
     {
         new Task<IReadOnlyList<Master>> GetAllAsync();
+        new Task<IReadOnlyList<Master>> GetByNameAsync(string name);
     }
 }
