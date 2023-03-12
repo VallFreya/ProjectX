@@ -6,6 +6,7 @@ namespace ProjectX.Web.Interfaces
     {
         Task<IEnumerable<MasterViewModel>> GetAllAsync();
         Task<MasterViewModel> GetByIdAsync(int id);
+        Task<MasterViewModel> GetByNameAsync(string name);
 
     }
 }

@@ -7,5 +7,7 @@ namespace ProjectX.Application.Interfaces
         Task<IEnumerable<Master>> GetAllAsync();
 
         Task<Master> GetByIdAsync(int id);
+
+        Task<Master> GetByNameAsync(string name);
     }
 }

@@ -21,5 +21,10 @@ namespace ProjectX.Application.Services
         {
             return await masterRepository.GetByIdAsync(id);
         }
+
+        public async Task<Master> GetByNameAsync(string name)
+        {
+            return (await masterRepository.GetByNameAsync(name)).FirstOrDefault();
+        }
     }
 }
