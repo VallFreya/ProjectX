@@ -18,5 +18,7 @@ namespace ProjectX.Core.Entities
         /// Фамилия
         /// </summary>
         public string Surname { get; set; }
+
+        public List<WorkingDay> WorkingDays { get; set;}
     }
 }

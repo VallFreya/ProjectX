@@ -15,6 +15,7 @@ namespace ProjectX.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Master>(ConfigureMaster);
+            builder.Entity<WorkingDay>(ConfigureWorkingDay);
         }
 
         private void ConfigureMaster(EntityTypeBuilder<Master> builder)
@@ -34,6 +35,24 @@ namespace ProjectX.Infrastructure.Data
             builder.Property(cb => cb.Surname)
                 .IsRequired()
                 .HasMaxLength(100);
+        }
+
+        private void ConfigureWorkingDay(EntityTypeBuilder<WorkingDay> builder)
+        {
+            builder.ToTable("WorkingDays");
+
+            builder.HasKey(ci => ci.Id);
+
+            builder.Property(cb => cb.MasterId)
+                .IsRequired();
+                
+            builder.Property(cb => cb.WorkDay)
+                .IsRequired();
+
+            builder.HasOne(p => p.Master)
+                .WithMany(t=>t.WorkingDays)
+                .HasForeignKey(p => p.MasterId);
+           
         }
     }
 }
