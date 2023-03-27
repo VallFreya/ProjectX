@@ -45,14 +45,14 @@ namespace ProjectX.Infrastructure.Data
 
             builder.Property(cb => cb.MasterId)
                 .IsRequired();
-                
+
             builder.Property(cb => cb.WorkDay)
                 .IsRequired();
 
             builder.HasOne(p => p.Master)
-                .WithMany(t=>t.WorkingDays)
+                .WithMany(t => t.WorkingDays)
                 .HasForeignKey(p => p.MasterId);
-           
+
         }
     }
 }
