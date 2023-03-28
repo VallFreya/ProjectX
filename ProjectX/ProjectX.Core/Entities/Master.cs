@@ -20,5 +20,9 @@ namespace ProjectX.Core.Entities
         public string Surname { get; set; }
 
         public List<WorkingDay> WorkingDays { get; set;}
+
+        public List<MasterTemplateTime> TemplateTimes { get; set; }
+
+        public List<MasterTemplate> Templates { get; set; }
     }
 }

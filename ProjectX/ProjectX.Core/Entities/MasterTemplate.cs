@@ -9,5 +9,10 @@ namespace ProjectX.Core.Entities
         public string TemplateName { get; set; }
 
         public int MasterId { get; set; }
+
+        public Master Master { get; set; }
+
+        public List<MasterTemplateTime> MasterTemplateTime { get;}
+
     }
 }
