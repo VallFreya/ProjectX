@@ -5,7 +5,7 @@ namespace ProjectX.Core.Entities.Enums
     /// <summary>
     /// Тип шаблона расписания
     /// </summary>
-    enum MasterTemplateType
+    public enum MasterTemplateType
     {
         /// <summary>
         /// Шаблон на будний день
