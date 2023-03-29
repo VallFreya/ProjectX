@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.Web", "ProjectX\ProjectX.Web.csproj", "{F5E2D22F-8B55-432D-BAF0-1671D251A911}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.Web", "ProjectX\ProjectX.Web.csproj", "{F5E2D22F-8B55-432D-BAF0-1671D251A911}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.Core", "ProjectX.Core\ProjectX.Core.csproj", "{746781E2-219F-4A1A-B487-A187C1326FC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.Core", "ProjectX.Core\ProjectX.Core.csproj", "{746781E2-219F-4A1A-B487-A187C1326FC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.Infrastructure", "ProjectX.Infrastructure\ProjectX.Infrastructure.csproj", "{18E218BD-F293-4888-AB82-C87222C91200}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.Infrastructure", "ProjectX.Infrastructure\ProjectX.Infrastructure.csproj", "{18E218BD-F293-4888-AB82-C87222C91200}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.Application", "ProjectX.Application\ProjectX.Application.csproj", "{5288FFA9-9B6C-4F67-BCA0-87FB4D83C2DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectX.Application", "ProjectX.Application\ProjectX.Application.csproj", "{5288FFA9-9B6C-4F67-BCA0-87FB4D83C2DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectX.PrivateOffice", "ProjectX.PrivateOffice\ProjectX.PrivateOffice.csproj", "{9727D6B2-EDE3-4ADD-92D5-B7E4D34429CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5288FFA9-9B6C-4F67-BCA0-87FB4D83C2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5288FFA9-9B6C-4F67-BCA0-87FB4D83C2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5288FFA9-9B6C-4F67-BCA0-87FB4D83C2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9727D6B2-EDE3-4ADD-92D5-B7E4D34429CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9727D6B2-EDE3-4ADD-92D5-B7E4D34429CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9727D6B2-EDE3-4ADD-92D5-B7E4D34429CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9727D6B2-EDE3-4ADD-92D5-B7E4D34429CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

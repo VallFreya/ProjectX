@@ -1,0 +1,122 @@
+﻿@page
+@model ProjectX.PrivateOffice.Pages.TemplateScheduleDay.IndexModel
+@{
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-7">
+            @foreach (var template in Model.MasterTimes.MasterTemplateTimes)
+            {
+                <p class="fw-bold">@Model.MasterTemplateTypes[template.TemplateId]</p>
+                <ul class="list-group">
+                    @foreach (var time in template.TimesStart)
+                    {
+                        <li class="list-group-item">
+                            <p>@time</p>
+                        </li>
+                    }
+                </ul>
+            }
+
+        </div>
+        <div class="col-3">
+            <ul class="list-group">
+                @foreach (var type in Model.MasterTemplateTypes)
+                {
+                    <li class="list-group-item">
+                        @{
+                            if (Model.MasterTimes.MasterTemplateTimes.Select(x => x.TemplateId).Contains(type.Key))
+                            {
+                                <button type="button" onclick="addFormSchedule()" class="btn btn-secondary">Изменить расписание на @Model.MasterTemplateTypes[type.Key]</button>
+                            }
+                            else
+                            {
+                                <button type="button" onclick="addFormSchedule()" class="btn btn-success">Добавить расписание на @Model.MasterTemplateTypes[type.Key]</button>
+                            }
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 form-container">
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" language="javascript">
+
+        //const mycomp = document.getElementById('myco');
+        //mycomp.addEventListener('mycomp-submit', (e) => loginButtonClickedHandler(e));
+
+
+        //function loginButtonClickedHandler(e) {
+        //    var username = e.detail.username;
+        //    var pass = e.detail.password;
+
+        //    document.getElementById('myUsername').value = username;
+        //    document.getElementById('myPass').value = pass;
+        //    document.getElementById('myform').submit();
+
+        //}
+        //const dropdownElementList = document.querySelectorAll('.dropdown-toggle');
+        //const dropdownList = [...dropdownElementList].map(dropdownToggleEl => new bootstrap.Dropdown(dropdownToggleEl));
+        //console.log(dropdownList);
+
+        function addFormSchedule() {
+            var form = $('.create-template').clone();
+            $(form).removeClass('d-none');
+            $('.form-container').append($(form));
+
+            $(".dropdown-menu li a").click(function (e) {
+                var id = $(e.currentTarget).data('id');
+                var selText = $(this).text();
+                var dropdown = $(this).parents('.dropdown').find('.dropdown-toggle');
+                dropdown.html(selText);
+                $(dropdown).attr('data-id', id);
+            });
+        }
+
+
+        // добавляем новые инпуты сразу после последнего инпута
+        function addTimeInput(e) {
+            console.log($(e))
+            var child = $('.add-time').last().clone();
+            $(child).find('input').val('');
+            var parent = $(e).parents('.create-template');
+            console.log(parent);
+            //$(child).insertAfter('.add-time:last');
+            $(child).insertAfter(parent.find('.add-time:last'));
+        }
+
+    </script>
+}
+
+
+
+<form class="create-template d-none">
+    <div class="mb-3">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Выберите шаблон
+            </button>
+            <ul class="dropdown-menu">
+                @foreach (var type in Model.MasterTemplateTypes)
+                {
+                    <li><a data-id="@type.Key" class="dropdown-item" href="#">@type.Value</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="mb-3 add-time">
+        <label for="InputTime" class="form-label">Время начала: </label>
+        <input type="text" class="form-control" id="InputTime">
+    </div>
+
+    <div class="mb-3">
+        <button type="button" class="btn btn-success" onclick="addTimeInput(this)">Добавить время</button>
+    </div>
+</form>

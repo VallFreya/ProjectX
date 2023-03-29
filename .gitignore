@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/ProjectX/ProjectX.Infrastructure/Data/DatabaseContext.cs
