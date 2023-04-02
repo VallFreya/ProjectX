@@ -28,11 +28,11 @@
                         @{
                             if (Model.MasterTimes.MasterTemplateTimes.Select(x => x.TemplateId).Contains(type.Key))
                             {
-                                <button type="button" onclick="addFormSchedule()" class="btn btn-secondary">Изменить расписание на @Model.MasterTemplateTypes[type.Key]</button>
+                                <button data-id="@type.Key" type="button" onclick="addFormSchedule(this)" class="btn btn-secondary">Изменить расписание на @Model.MasterTemplateTypes[type.Key]</button>
                             }
                             else
                             {
-                                <button type="button" onclick="addFormSchedule()" class="btn btn-success">Добавить расписание на @Model.MasterTemplateTypes[type.Key]</button>
+                                <button data-id="@type.Key" type="button" onclick="addFormSchedule(this)" class="btn btn-success">Добавить расписание на @Model.MasterTemplateTypes[type.Key]</button>
                             }
                         }
                     </li>
@@ -49,10 +49,11 @@
 
 @section Scripts{
     <script type="text/javascript" language="javascript">
-        function addFormSchedule() {
+        function addFormSchedule(e) {
             var form = $('.create-template:last').clone();
             $(form).removeClass('d-none');
             $('.form-container').append($(form));
+            var index = $(e).data("id");
 
             // вынести в функцию мб? 
             $(".dropdown-menu li a").click(function (e) {

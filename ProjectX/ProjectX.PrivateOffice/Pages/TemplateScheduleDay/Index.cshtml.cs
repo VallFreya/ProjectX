@@ -27,7 +27,7 @@ namespace ProjectX.PrivateOffice.Pages.TemplateScheduleDay
                     {
                         Id = 1,
                         TemplateId = 1,
-                        TimesStart = new List<string>() { "10:00", "12:00", "14:00", "16:00" }
+                        TimesStart = new List<string>() { "10:00", "12:00", "14:00", "16:00" },
                     },
                     //new MasterTemplateTimes()
                     //{
