@@ -1,11 +1,13 @@
 ﻿@page
 @model ProjectX.PrivateOffice.Pages.TemplateScheduleDay.IndexModel
+@using ProjectX.Core.Entities.Enums;
+@using ProjectX.Core.Extentions;
 @{
 }
 
 <div class="container">
     <div class="row">
-        <div class="col-7">
+        <div class="col-6">
             @foreach (var template in Model.MasterTimes.MasterTemplateTimes)
             {
                 <p class="fw-bold">@Model.MasterTemplateTypes[template.TemplateId]</p>
@@ -20,31 +22,16 @@
             }
 
         </div>
-        <div class="col-3">
-            <ul class="list-group">
-                @foreach (var type in Model.MasterTemplateTypes)
-                {
-                    <li class="list-group-item">
-                        @{
-                            if (Model.MasterTimes.MasterTemplateTimes.Select(x => x.TemplateId).Contains(type.Key))
-                            {
-                                <button data-id="@type.Key" type="button" onclick="addFormSchedule(this)" class="btn btn-secondary">Изменить расписание на @Model.MasterTemplateTypes[type.Key]</button>
-                            }
-                            else
-                            {
-                                <button data-id="@type.Key" type="button" onclick="addFormSchedule(this)" class="btn btn-success">Добавить расписание на @Model.MasterTemplateTypes[type.Key]</button>
-                            }
-                        }
-                    </li>
-                }
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4 form-container">
+        <div class="col-6">
 
+            <button type="button" onclick="addFormSchedule(this)" class="btn btn-success add-template">Добавить шаблон</button>
+            <div class="row">
+                <div class="col-12 form-container">
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
 @section Scripts{
@@ -55,14 +42,32 @@
             $('.form-container').append($(form));
             var index = $(e).data("id");
 
-            // вынести в функцию мб? 
+
+            var selText = $(e).data("value");
+            var dropdown = $('.dropdown-menu').parents('.dropdown').find('.dropdown-toggle');
+            dropdown.html(selText);
+            $(dropdown).attr('data-id', index);
+
+            $(e).attr("disabled", true);
+
+
+            // вынести в функцию мб?
             $(".dropdown-menu li a").click(function (e) {
                 var id = $(e.currentTarget).data('id');
                 var selText = $(this).text();
                 var dropdown = $(this).parents('.dropdown').find('.dropdown-toggle');
                 dropdown.html(selText);
                 $(dropdown).attr('data-id', id);
+                if (id == @Convert.ToInt32(MasterTemplateType.Custom)) {
+                    $('.add-template-name').removeClass('d-none');
+
+                } else {
+                    $('.add-template-name').addClass('d-none');
+                }
+
             });
+
+
         }
 
 
@@ -72,32 +77,74 @@
             $(child).find('input').val('');
             var parent = $(e).parents('.create-template');
             $(child).insertAfter(parent.find('.add-time:last'));
+            checkDeleteButtons();
+        }
+
+        function saveTemplate(e) {
+            $('.add-template').attr("disabled", false);
+            $('.form-container').html('');
+        }
+
+        function deleteAddTimeInput(e){
+            var parent = $(e).parents('.add-time');
+            $(parent).remove();
+            checkDeleteButtons();
+        }
+
+        function checkDeleteButtons(){
+            var elements = $('.form-container').find('.add-time');
+            var buttons = $('.form-container').find('.delete-add-time-input');
+            console.log(buttons);
+            if (elements.length>1){
+                
+                $(buttons).removeClass('d-none');
+            } else {
+                $(buttons).addClass('d-none');
+            }
         }
     </script>
 }
 
-
-
 <form class="create-template d-none">
-    <div class="mb-3">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Выберите шаблон
-            </button>
-            <ul class="dropdown-menu">
-                @foreach (var type in Model.MasterTemplateTypes)
-                {
-                    <li><a data-id="@type.Key" class="dropdown-item" href="#">@type.Value</a></li>
-                }
-            </ul>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Выберите шаблон
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a data-id="@Convert.ToInt32(MasterTemplateType.Custom)" class="dropdown-item" href="#">@MasterTemplateType.Custom.GetDescription()</a></li>
+                    @foreach (var type in Model.MasterTemplateTypes.Where(x => x.Key != (int)MasterTemplateType.Custom))
+                    {
+                        if (!Model.MasterTimes.MasterTemplateTimes.Select(x => x.TemplateId).Contains(type.Key))
+                        {
+                            <li><a data-id="@type.Key" class="dropdown-item" href="#">@type.Value</a></li>
+                        }
+
+                    }
+                </ul>
+            </div>
+        </div>
+        <input type="text" class="form-control d-none add-template-name" placeholder="Введите название шаблона">
+    </div>
+    <div class="add-time">
+        <label for="InputTime" class="form-label">Время начала: </label>
+        <div class="input-group mb-3">
+
+            <input type="text" class="form-control" id="InputTime">
+            <div class="input-group-append">
+                <button class="btn btn-danger d-none delete-add-time-input" type="button" onclick="deleteAddTimeInput(this)" data-toggle="tooltip" data-placement="top" title="Удалить время">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="mb-3 add-time">
-        <label for="InputTime" class="form-label">Время начала: </label>
-        <input type="text" class="form-control" id="InputTime">
-    </div>
 
-    <div class="mb-3">
+
+    <div class="mb-3 position-relative">
         <button type="button" class="btn btn-success" onclick="addTimeInput(this)">Добавить время</button>
+        <button type="button" class="btn btn-success position-absolute bottom-0 end-0" onclick="saveTemplate(this)">Сохранить шаблон</button>
     </div>
 </form>
