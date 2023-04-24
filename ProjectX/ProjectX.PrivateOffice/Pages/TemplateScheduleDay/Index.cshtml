@@ -10,21 +10,49 @@
         <div class="col-6">
             @foreach (var template in Model.MasterTimes.MasterTemplateTimes)
             {
-                <p class="fw-bold">@Model.MasterTemplateTypes[template.TemplateId]</p>
-                <ul class="list-group">
+                <form class="change-template-form">
+                    <div class="row">
+                        <div class="col-8">
+                            <p class="fw-bold">@Model.MasterTemplateTypes[template.TemplateId]</p>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" onclick="changeTemplate(this)" class="btn btn-success float-end change-template">Изменить </button>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteTemplate">Удалить </button>
+                        </div>
+                    </div>
+
                     @foreach (var time in template.TimesStart)
                     {
-                        <li class="list-group-item">
-                            <p>@time</p>
-                        </li>
+                        <div class="add-time">
+                            <p>
+                                <div class="input-group ">
+
+                                    <input type="text" class="form-control input-change-template" value="@time" readonly><div class="input-group-append">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-danger d-none delete-add-time-input" type="button" onclick="deleteAddTimeInput(this,'change-template-form')" data-toggle="tooltip" data-placement="top" title="Удалить время">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
                     }
-                </ul>
+                    <button type="button" onclick="addTimeInput(this,'change-template-form')" class="btn btn-success d-none add-time-template">Добавить время </button>
+                    <button type="button" onclick="saveChangesTemplate(this)" class="btn btn-success float-end d-none save-chahges-template">Сохранить </button>
+                </form>
             }
 
         </div>
         <div class="col-6">
+            <div class="row">
+                <div class="col-6"><button type="button" onclick="addFormSchedule(this)" class="btn btn-success add-template">Добавить шаблон</button></div>
 
-            <button type="button" onclick="addFormSchedule(this)" class="btn btn-success add-template">Добавить шаблон</button>
+            </div>
             <div class="row">
                 <div class="col-12 form-container">
                 </div>
@@ -34,19 +62,16 @@
 
 </div>
 
+
 @section Scripts{
     <script type="text/javascript" language="javascript">
+
         function addFormSchedule(e) {
             var form = $('.create-template:last').clone();
             $(form).removeClass('d-none');
             $('.form-container').append($(form));
             var index = $(e).data("id");
 
-
-            var selText = $(e).data("value");
-            var dropdown = $('.dropdown-menu').parents('.dropdown').find('.dropdown-toggle');
-            dropdown.html(selText);
-            $(dropdown).attr('data-id', index);
 
             $(e).attr("disabled", true);
 
@@ -64,20 +89,16 @@
                 } else {
                     $('.add-template-name').addClass('d-none');
                 }
-
             });
-
-
         }
 
-
         // добавляем новые инпуты сразу после последнего инпута
-        function addTimeInput(e) {
-            var child = $('.add-time').last().clone();
+        function addTimeInput(e, containerClassName) {
+            var child = $('.' + containerClassName).find('.add-time').last().clone();
             $(child).find('input').val('');
-            var parent = $(e).parents('.create-template');
+            var parent = $(e).parents('.' + containerClassName);
             $(child).insertAfter(parent.find('.add-time:last'));
-            checkDeleteButtons();
+            checkDeleteButtons(containerClassName);
         }
 
         function saveTemplate(e) {
@@ -85,25 +106,40 @@
             $('.form-container').html('');
         }
 
-        function deleteAddTimeInput(e){
+        function deleteAddTimeInput(e, containerClassName) {
             var parent = $(e).parents('.add-time');
             $(parent).remove();
-            checkDeleteButtons();
+            checkDeleteButtons(containerClassName);
         }
 
-        function checkDeleteButtons(){
-            var elements = $('.form-container').find('.add-time');
-            var buttons = $('.form-container').find('.delete-add-time-input');
-            console.log(buttons);
-            if (elements.length>1){
-                
+        function checkDeleteButtons(containerClassName) {
+            var elements = $('.' + containerClassName).find('.add-time');
+            var buttons = $('.' + containerClassName).find('.delete-add-time-input');
+            if (elements.length > 1) {
+
                 $(buttons).removeClass('d-none');
             } else {
                 $(buttons).addClass('d-none');
             }
         }
+
+        function changeTemplate(e) {
+            $(e).attr("disabled", true);
+            $('.save-chahges-template').removeClass('d-none');
+            $('.add-time-template').removeClass('d-none');
+            $('.input-change-template').attr("readonly", false);
+            checkDeleteButtons("change-template-form");
+        }
+
+        function saveChangesTemplate(e) {
+            $(e).addClass('d-none');
+            $('.change-template').attr("disabled", false);
+            $('.input-change-template').attr("readonly", true);
+            $('.change-template-form').find('.delete-add-time-input').addClass('d-none');
+            $('.change-template-form').find('.add-time-template').addClass('d-none');
+        }
     </script>
-}
+    }
 
 <form class="create-template d-none">
     <div class="input-group mb-3">
@@ -133,7 +169,7 @@
 
             <input type="text" class="form-control" id="InputTime">
             <div class="input-group-append">
-                <button class="btn btn-danger d-none delete-add-time-input" type="button" onclick="deleteAddTimeInput(this)" data-toggle="tooltip" data-placement="top" title="Удалить время">
+                <button class="btn btn-danger d-none delete-add-time-input" type="button" onclick="deleteAddTimeInput(this, 'form-container')" data-toggle="tooltip" data-placement="top" title="Удалить время">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"></path>
                     </svg>
@@ -144,7 +180,27 @@
 
 
     <div class="mb-3 position-relative">
-        <button type="button" class="btn btn-success" onclick="addTimeInput(this)">Добавить время</button>
+        <button type="button" class="btn btn-success" onclick="addTimeInput(this, 'form-container')">Добавить время</button>
         <button type="button" class="btn btn-success position-absolute bottom-0 end-0" onclick="saveTemplate(this)">Сохранить шаблон</button>
     </div>
 </form>
+
+<div class="modal fade" id="deleteTemplate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Удаление шаблона</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить шаблон?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-danger">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
