@@ -1,4 +1,5 @@
 ﻿@page
+@Html.AntiForgeryToken()
 @model ProjectX.PrivateOffice.Pages.TemplateScheduleDay.IndexModel
 @using ProjectX.Core.Entities.Enums;
 @using ProjectX.Core.Extentions;
@@ -62,7 +63,7 @@
 
 </div>
 
-
+@Html.Hidden("sourceUrl", Request.Path);
 @section Scripts{
     <script type="text/javascript" language="javascript">
 
@@ -96,13 +97,47 @@
         function addTimeInput(e, containerClassName) {
             var container = $(e).parents('.' + containerClassName);
             var child = $(container).find('.add-time').last().clone();
-            $(child).find('input').val('');            
+            $(child).find('input').val('');
 
             $(child).insertAfter(container.find('.add-time:last'));
             checkDeleteButtons(container);
         }
 
         function saveTemplate(e) {
+            var sourceUrl = $('#sourceUrl').val();
+            var container = $('.create-template:not(.d-none)');
+
+            // получаем все время из всех импутов
+            var times = [];
+            var timesElement = $(container).find("input[id='InputTime']").each(function () {
+                var element = $(this);
+                times.push($(element).val());
+            });
+
+            var templateName = $(container).find('.add-template-name').val();
+
+            var templateId = $(container).find('.dropdown-toggle').data('id');
+
+            var requestData = {
+                TemplateId: parseInt(templateId),
+                TimesStart: times,
+                TemplateName: templateName
+            };
+
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: "POST",
+                url: sourceUrl + "?handler=AddTemplate",
+                data: requestData,
+                success: function (data) {
+                    console.log("SUCCESS!");
+                    console.log(data);
+                }
+            });
+
+
             $('.add-template').attr("disabled", false);
             $('.form-container').html('');
         }
@@ -136,7 +171,7 @@
         }
 
         function saveChangesTemplate(e) {
-           
+
             var inputs = $(e).parents('.change-template-form').find('input:text');
             $(inputs).css("border-color", "#ced4da");
             var emptyInputs = $(inputs).filter(function () { return this.value == ""; });
@@ -145,7 +180,7 @@
                 $(emptyInputs).css("border-color", "#dc3545");
                 return;
             }
-            
+
             $(e).addClass('d-none');
             $('.change-template').attr("disabled", false);
             $('.input-change-template').attr("readonly", true);

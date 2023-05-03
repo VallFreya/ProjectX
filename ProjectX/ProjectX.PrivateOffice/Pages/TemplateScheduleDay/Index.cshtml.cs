@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using ProjectX.Core.Entities;
 using ProjectX.Core.Entities.Enums;
 using ProjectX.Core.Extentions;
+using ProjectX.PrivateOffice.Pages.Models.TemplateScheduleDay;
 using ProjectX.PrivateOffice.Pages.ViewModels;
 
 namespace ProjectX.PrivateOffice.Pages.TemplateScheduleDay
@@ -37,6 +39,12 @@ namespace ProjectX.PrivateOffice.Pages.TemplateScheduleDay
                     }
                 }
             };
+        }
+
+        public IActionResult OnPostAddTemplate([FromForm]AddTemplatePostModel model)
+        {
+
+            return RedirectToPage("./Index");
         }
     }
 }
