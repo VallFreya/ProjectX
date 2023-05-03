@@ -29,12 +29,12 @@ namespace ProjectX.PrivateOffice.Pages.TemplateScheduleDay
                         TemplateId = 1,
                         TimesStart = new List<string>() { "10:00", "12:00", "14:00", "16:00" },
                     },
-                    //new MasterTemplateTimes()
-                    //{
-                    //    Id = 2,
-                    //    TemplateId = 2,
-                    //    TimesStart = new List<string>() { "11: 00", "13:00", "15:00", "17:00"}
-                    //}
+                    new MasterTemplateTimes()
+                    {
+                        Id = 2,
+                        TemplateId = 2,
+                        TimesStart = new List<string>() { "11: 00", "13:00", "15:00", "17:00"}
+                    }
                 }
             };
         }

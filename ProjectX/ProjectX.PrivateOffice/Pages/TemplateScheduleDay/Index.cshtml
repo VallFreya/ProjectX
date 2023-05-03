@@ -29,7 +29,7 @@
                             <p>
                                 <div class="input-group ">
 
-                                    <input type="text" class="form-control input-change-template" value="@time" readonly><div class="input-group-append">
+                                    <input type="text" class="form-control input-change-template" value="@time" placeholder="Время начала" readonly><div class="input-group-append">
                                         <div class="input-group-append">
                                             <button class="btn btn-danger d-none delete-add-time-input" type="button" onclick="deleteAddTimeInput(this,'change-template-form')" data-toggle="tooltip" data-placement="top" title="Удалить время">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
@@ -94,11 +94,12 @@
 
         // добавляем новые инпуты сразу после последнего инпута
         function addTimeInput(e, containerClassName) {
-            var child = $('.' + containerClassName).find('.add-time').last().clone();
-            $(child).find('input').val('');
-            var parent = $(e).parents('.' + containerClassName);
-            $(child).insertAfter(parent.find('.add-time:last'));
-            checkDeleteButtons(containerClassName);
+            var container = $(e).parents('.' + containerClassName);
+            var child = $(container).find('.add-time').last().clone();
+            $(child).find('input').val('');            
+
+            $(child).insertAfter(container.find('.add-time:last'));
+            checkDeleteButtons(container);
         }
 
         function saveTemplate(e) {
@@ -107,14 +108,15 @@
         }
 
         function deleteAddTimeInput(e, containerClassName) {
+            var container = $(e).parents('.' + containerClassName);
             var parent = $(e).parents('.add-time');
             $(parent).remove();
-            checkDeleteButtons(containerClassName);
+            checkDeleteButtons(container);
         }
 
-        function checkDeleteButtons(containerClassName) {
-            var elements = $('.' + containerClassName).find('.add-time');
-            var buttons = $('.' + containerClassName).find('.delete-add-time-input');
+        function checkDeleteButtons(container) {
+            var elements = $(container).find('.add-time');
+            var buttons = $(container).find('.delete-add-time-input');
             if (elements.length > 1) {
 
                 $(buttons).removeClass('d-none');
@@ -125,13 +127,25 @@
 
         function changeTemplate(e) {
             $(e).attr("disabled", true);
-            $('.save-chahges-template').removeClass('d-none');
-            $('.add-time-template').removeClass('d-none');
-            $('.input-change-template').attr("readonly", false);
-            checkDeleteButtons("change-template-form");
+            var container = $(e).parents('.change-template-form');
+            console.log($(container));
+            $(container).find('.save-chahges-template').removeClass('d-none');
+            $(container).find('.add-time-template').removeClass('d-none');
+            $(container).find('.input-change-template').attr("readonly", false);
+            checkDeleteButtons(container);
         }
 
         function saveChangesTemplate(e) {
+           
+            var inputs = $(e).parents('.change-template-form').find('input:text');
+            $(inputs).css("border-color", "#ced4da");
+            var emptyInputs = $(inputs).filter(function () { return this.value == ""; });
+            console.log($(emptyInputs));
+            if ($(emptyInputs).length > 0) {
+                $(emptyInputs).css("border-color", "#dc3545");
+                return;
+            }
+            
             $(e).addClass('d-none');
             $('.change-template').attr("disabled", false);
             $('.input-change-template').attr("readonly", true);
@@ -164,10 +178,9 @@
         <input type="text" class="form-control d-none add-template-name" placeholder="Введите название шаблона">
     </div>
     <div class="add-time">
-        <label for="InputTime" class="form-label">Время начала: </label>
         <div class="input-group mb-3">
 
-            <input type="text" class="form-control" id="InputTime">
+            <input type="text" class="form-control" id="InputTime" placeholder="Время начала">
             <div class="input-group-append">
                 <button class="btn btn-danger d-none delete-add-time-input" type="button" onclick="deleteAddTimeInput(this, 'form-container')" data-toggle="tooltip" data-placement="top" title="Удалить время">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
