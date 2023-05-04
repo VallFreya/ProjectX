@@ -5,7 +5,7 @@
         /// <summary>
         /// Id шаблона <see cref="Core.Entities.Enums.MasterTemplateType"/>
         /// </summary>
-        public int TemplateId { get; set; }
+        public int TemplateTypeId { get; set; }
 
         /// <summary>
         /// Список времени начала

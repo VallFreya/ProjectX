@@ -20,7 +20,7 @@
                             <button type="button" onclick="changeTemplate(this)" class="btn btn-success float-end change-template">Изменить </button>
                         </div>
                         <div class="col-2">
-                            <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteTemplate">Удалить </button>
+                            <button type="button" class="btn btn-danger float-end delete-template" data-template-id="@template.TemplateId" data-bs-toggle="modal" data-bs-target="#deleteTemplate">Удалить </button>
                         </div>
                     </div>
 
@@ -66,6 +66,17 @@
 @Html.Hidden("sourceUrl", Request.Path);
 @section Scripts{
     <script type="text/javascript" language="javascript">
+
+        $(document).ready(function () {
+            
+            var openModalDeleteTemplate = $('#deleteTemplate');
+            $(openModalDeleteTemplate).on('show.bs.modal', function (e) {
+                
+                var templateId = $(e.relatedTarget).data("template-id");
+                $(e.currentTarget).find('.modal-delete-template').data('template-id', templateId);
+
+            });
+        });
 
         function addFormSchedule(e) {
             var form = $('.create-template:last').clone();
@@ -119,7 +130,7 @@
             var templateId = $(container).find('.dropdown-toggle').data('id');
 
             var requestData = {
-                TemplateId: parseInt(templateId),
+                TemplateTypeId: parseInt(templateId),
                 TimesStart: times,
                 TemplateName: templateName
             };
@@ -140,6 +151,29 @@
 
             $('.add-template').attr("disabled", false);
             $('.form-container').html('');
+        }
+
+        function deleteTemplate(e) {
+            
+            var templateId = $(e).data("template-id");
+            var sourceUrl = $('#sourceUrl').val();
+
+            var requestData = {
+                TemplateId: parseInt(templateId)
+            };
+
+            $.ajax({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                type: "POST",
+                url: sourceUrl + "?handler=DeleteTemplate",
+                data: requestData,
+                success: function (data) {
+                    console.log("SUCCESS!");
+                    console.log(data);
+                }
+            });
         }
 
         function deleteAddTimeInput(e, containerClassName) {
@@ -163,7 +197,6 @@
         function changeTemplate(e) {
             $(e).attr("disabled", true);
             var container = $(e).parents('.change-template-form');
-            console.log($(container));
             $(container).find('.save-chahges-template').removeClass('d-none');
             $(container).find('.add-time-template').removeClass('d-none');
             $(container).find('.input-change-template').attr("readonly", false);
@@ -175,7 +208,6 @@
             var inputs = $(e).parents('.change-template-form').find('input:text');
             $(inputs).css("border-color", "#ced4da");
             var emptyInputs = $(inputs).filter(function () { return this.value == ""; });
-            console.log($(emptyInputs));
             if ($(emptyInputs).length > 0) {
                 $(emptyInputs).css("border-color", "#dc3545");
                 return;
@@ -247,7 +279,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-danger">Удалить</button>
+                <button type="button" onclick="deleteTemplate(this)" class="btn btn-danger modal-delete-template">Удалить</button>
             </div>
         </div>
     </div>

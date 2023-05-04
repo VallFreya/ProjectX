@@ -41,10 +41,15 @@ namespace ProjectX.PrivateOffice.Pages.TemplateScheduleDay
             };
         }
 
-        public IActionResult OnPostAddTemplate([FromForm]AddTemplatePostModel model)
+        public IActionResult OnPostAddTemplate([FromForm] AddTemplatePostModel model)
         {
-
             return RedirectToPage("./Index");
         }
+
+        public IActionResult OnPostDeleteTemplate([FromForm] DeleteTemplatePostModel model)
+        {
+            return RedirectToPage("./Index");
+        }
+
     }
 }
